@@ -1,5 +1,6 @@
 class StudentsController < ApplicationController
   before_action :find_student, only: [:show, :edit, :update]
+  before_action :find_instructors, only:[:new, :edit]
   def index
     @students = Student.all
   end
@@ -10,7 +11,6 @@ class StudentsController < ApplicationController
 
   def new()
     @student = Student.new()
-    @instructors = Instructor.all()
   end
 
   def create()
@@ -26,7 +26,6 @@ class StudentsController < ApplicationController
   end
 
   def edit()
-    @instructors = Instructor.all
   end
 
   def update()
@@ -34,6 +33,7 @@ class StudentsController < ApplicationController
     if @student.valid?
       redirect_to student_path(@student)
     else 
+      flash[:errors] = @student.errors.full_messages
       redirect_to edit_student_path(@student)
     end
   end
@@ -50,6 +50,10 @@ class StudentsController < ApplicationController
 
   def find_instructor()
     Instructor.find(@student.instructor_id)
+  end
+
+  def find_instructors()
+    @instructors = Instructor.all
   end
   
 end
