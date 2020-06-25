@@ -6,7 +6,6 @@ class StudentsController < ApplicationController
   end
 
   def show()
-    @instructor = @student.instructor
   end
 
   def new()
@@ -15,14 +14,7 @@ class StudentsController < ApplicationController
 
   def create()
     @student = Student.new(student_params)
-
-    if @student.valid?
-      @student.save()
-      redirect_to instructor_path(find_instructor())
-    else
-      flash[:errors] = @student.errors.full_messages
-      redirect_to new_student_path
-    end
+    validate(instructor_path(@student.instructor), new_student_path)
   end
 
   def edit()
@@ -30,12 +22,7 @@ class StudentsController < ApplicationController
 
   def update()
     @student.update(student_params)
-    if @student.valid?
-      redirect_to student_path(@student)
-    else 
-      flash[:errors] = @student.errors.full_messages
-      redirect_to edit_student_path(@student)
-    end
+    validate(student_path(@student), edit_student_path(@student))
   end
 
   private
@@ -48,12 +35,18 @@ class StudentsController < ApplicationController
     @student = Student.find(params[:id])
   end
 
-  def find_instructor()
-    Instructor.find(@student.instructor_id)
+   def find_instructors()
+    @instructors = Instructor.all
   end
 
-  def find_instructors()
-    @instructors = Instructor.all
+  def validate(valid_path, error_path)
+    if @student.valid?
+      @student.save()
+      redirect_to valid_path
+    else 
+      flash[:errors] = @student.errors.full_messages
+      redirect_to error_path
+    end
   end
   
 end
