@@ -1,9 +1,9 @@
 <h2> <%= @instructor.name%> </h2>
-<h3> Average Age of Students: <%= @avg.ceil(2)%>
+<h3> Average Age of Students: <%= @instructor.average_age.ceil(2)%>
 </h3> 
 <h3> Students: </h3>
 <ol>
-    <% @sorted_students.each {|student| %>
+    <% @instructor.sorted_students.each {|student| %>
         <li> 
             <%=link_to student.name, student_path(student)%> <br>
         </li>
