@@ -2,6 +2,6 @@
 
 <ul>
   <% @instructors.each do |instructor| %>
-    <li><%= instructor.name %></li>
+    <li><%= link_to instructor.name, instructor_path(instructor)%></li>
   <% end %>
 </ul>
